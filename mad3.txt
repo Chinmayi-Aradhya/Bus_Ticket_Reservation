@@ -1,0 +1,60 @@
+//index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple HTML Page</title>
+    <script src="/sw.js"></script>
+</head>
+<body>
+    <h1>Welcome to My Simple HTML Page</h1>
+    <p>This is a basic example of an HTML page with some styling.</p>
+    <table border="0">
+        <tr>
+            <th>Picture</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><img src="/images/img1.jpg" width="100px" height="100px"></td>
+            <td>RVCE Logo</td>
+        </tr>
+        <tr>
+            <td><img src="/images/img2.jpg" width="100px" height="100px"></td>
+            <td>PWA ICON</td>
+        </tr>
+    <tr>
+            <td><img src="/images/img3.jpg" width="100px" height="100px"></td>
+            <td>PWA ICON</td>
+        </tr>
+    </table>
+inside the html page with manifest
+</body>
+</html>
+
+//serviceworker.js
+self.addEventListener('load', (event) => {
+  console.log('Service Worker loading.');  
+});
+self.addEventListener('install', (event) => {
+  console.log('Service Worker installing.');
+});
+self.addEventListener('activate', (event) => {
+  console.log('Service Worker activating.');
+});
+self.addEventListener('fetch', (event) => {
+  console.log('Fetching:', event.request.url);
+  console.log('Fetch event handled.');
+});
+
+//sw.js
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/serviceworker.js")
+      .then((registration) => {
+        console.log("Service Worker registered with scope:", registration.scope);
+      })
+      .catch((error) => {
+        console.error("Service Worker registration failed:", error);
+      });
+  });
+}
