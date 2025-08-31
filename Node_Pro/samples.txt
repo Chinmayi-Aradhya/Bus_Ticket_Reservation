@@ -1,0 +1,50 @@
+scp -i bus.pem "Node Pro.zip" ubuntu@<your-ec2-ip>:/home/ubuntu/
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicRead",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::bus-reservation-frontend/*"
+    }
+  ]
+}
+
+
+
+CREATE TABLE IF NOT EXISTS buses (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  bus_number VARCHAR(20) UNIQUE NOT NULL,
+  route VARCHAR(100) NOT NULL,
+  departure_time TIME NOT NULL,
+  arrival_time TIME NOT NULL,
+  total_seats INT NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS bookings (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  bus_id INT NOT NULL,
+  passenger_name VARCHAR(100) NOT NULL,
+  passenger_email VARCHAR(100) NOT NULL,
+  passenger_phone VARCHAR(20) NOT NULL,
+  seats_booked INT NOT NULL,
+  booking_date DATE NOT NULL,
+  total_amount DECIMAL(10,2) NOT NULL,
+  status ENUM('confirmed', 'cancelled') DEFAULT 'confirmed',
+  booking_reference VARCHAR(20) UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (bus_id) REFERENCES buses(id)
+);
+
+INSERT INTO buses (bus_number, route, departure_time, arrival_time, total_seats, price) VALUES
+('BUS001', 'Mumbai to Delhi', '06:00:00', '22:00:00', 40, 1200.00),
+('BUS002', 'Delhi to Bangalore', '08:30:00', '06:30:00', 35, 1800.00),
+('BUS003', 'Chennai to Hyderabad', '10:00:00', '16:00:00', 42, 800.00),
+('BUS004', 'Kolkata to Mumbai', '07:15:00', '11:15:00', 38, 2000.00),
+('BUS005', 'Pune to Goa', '09:00:00', '15:30:00', 30, 600.00);
+
